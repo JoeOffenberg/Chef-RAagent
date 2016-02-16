@@ -1,6 +1,6 @@
 RAagent Cookbook
 ================
-TODO: Installs RAAgent on Linux node
+Retrieves agent install from RA Server and installs RAAgent on Linux node
 
 
 Requirements
@@ -63,4 +63,4 @@ Contributing
 
 License and Authors
 -------------------
-Authors: TODO: List authors
+Authors: Joe Offenberg, CA Technologies
