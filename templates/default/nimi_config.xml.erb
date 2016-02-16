@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<config>
+    <nimi>
+        <general>
+            <node_type>node</node_type> <!-- node or supernode -->
+            <node_id>target01.forwardinc.ca</node_id>
+        </general>
+        <appmessages>
+            <threadpool>
+                <size>5</size>
+                <keepAlive>60000</keepAlive>
+            </threadpool>
+        </appmessages>
+        <network>
+            <threadpool>
+                <client>
+                    <size>2</size>
+                </client>
+                <server>
+                    <size>2</size>
+                </server>
+                <outbound>
+                    <size>5</size>
+                    <keepAlive>60000</keepAlive>    <!-- 1 min. -->
+                </outbound>
+            </threadpool>
+            <queue>
+                <outbound>
+                    <capacity>1000</capacity>
+                </outbound>
+            </queue>
+            <port>6600</port>
+            <bad_destination_throttle_time>15000</bad_destination_throttle_time>
+            <timeout>
+                <connect>60000</connect>
+                <read>0</read>   <!-- disabled -->
+                <idle>120000</idle>
+                <write>0</write>  <!-- disabled -->
+                <sender_creation>120000</sender_creation>
+            </timeout>
+            <security>
+                <enabled>false</enabled>
+                <keystore>conf/keyStore.jks</keystore>
+                <keystore_password>E8A1491BD9EF9F79E11C0640C0EC0BA4</keystore_password>
+                <trust_store>conf/nolio.jks</trust_store>
+                <trustore_password>E8A1491BD9EF9F79E11C0640C0EC0BA4</trustore_password>
+            </security>
+            <reverse_settings>
+                <nodes>
+                    <!--<node> 127.0.0.1:6601</node>-->
+                </nodes>
+                <connection_queue_size>5242880</connection_queue_size> <!--5MB-->
+                <connection_queue_wait_time>180000</connection_queue_wait_time> <!--in milliseconds-->
+                <poll_interval>150000</poll_interval> <!-- poll every 2.5 min-->
+                <poll_retry>150000</poll_retry> <!-- poll retry in case of other side is dead every 2.5 min-->
+            </reverse_settings>
+        </network>
+        <routing>
+            <threadpool>
+                <size>5</size>
+            </threadpool>
+            <timeout>
+                <request>180000</request>
+            </timeout>
+            <retry>
+                <count>3</count>
+                <duration>15000</duration>
+            </retry>
+            <lifetime>
+                <route>86400000</route><!-- after 1 day route can be deleted-->
+                <directnode>930000</directnode><!-- after 15.5 minutes direct node can be deleted-->
+            </lifetime>
+            <persistence>
+                <enabled>false</enabled>
+            </persistence>
+        </routing>
+        <keepalive>
+            <threadpool>
+                <size>2</size>
+            </threadpool>
+            <client>
+                <retry>
+                    <!-- number of times to try the server till we try another one if exist -->
+                    <count>2</count>
+                    <!-- number of milliseconds to wait after we can not connect to server -->
+                    <timeout>60000</timeout>
+                    <interval>840000</interval>  <!-- 14 minutes keep alive request is resent-->
+                </retry>
+                <supernodes>
+                    <supernode><%= node['RAagent']['RA_Server'] %>:<%= node['RAagent']['RA_ES_nimi_Port'] %></supernode>
+                    <!--<supernode>127.0.0.2:6900</supernode>-->
+                </supernodes>
+            </client>
+            <server>
+                <capacity>200</capacity> <!-- how much nodes to accept-->
+                <warn-capacity>200</warn-capacity> <!-- over this limit new connecting nodes will be asked to seek another supernode-->
+            </server>
+        </keepalive>
+
+        <files>
+            <threadpool>
+                <size>10</size>
+            </threadpool>
+            <directories>
+                <!-- use java's default temp directory-->
+                <temp>files_temp</temp>
+                <cache>files_cache</cache>
+            </directories>
+            <cache_type>LRU</cache_type> <!-- [LRU (default) | NONE]-->
+            <cache_size>1048576</cache_size> <!-- 1Gb in kb-->
+            <chunk_size>1038336</chunk_size> <!-- 990kb-->
+            <window_size>5</window_size>
+            <timeout>   <!--per file chunk-->
+                <download>60000</download> <!-- one minute -->
+                <upload>60000</upload> <!-- one minute -->
+            </timeout>
+        </files>
+        <logging>
+            <enable-all-subjects>false</enable-all-subjects>
+            <enabled-subjects>
+                <subject>APP_MSG</subject>
+                <subject>FILES</subject>
+                <subject>KEEP_ALIVE</subject>
+                <subject>ROUTING</subject>
+                <subject>REVERSE_CHANNEL</subject>
+                <subject>COMM</subject>
+                <!--<subject>DETAILED_COMM</subject>-->
+                <subject>ENGINE</subject>
+            </enabled-subjects>
+        </logging>
+
+    </nimi>
+</config>
